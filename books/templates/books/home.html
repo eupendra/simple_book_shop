@@ -12,11 +12,35 @@
       integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
       crossorigin="anonymous"
     />
+   <title>Book Store!</title>
 
-    <title>Hello, world!</title>
   </head>
   <body>
-    <h1>Welcome to our store</h1>
+    {% load cart_helper %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Book Store</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'home'%}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'cart'%}">Cart</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'checkout'%}">Checkout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container-fluid text-center">
+    <h1>Welcome to our store</h1></div>
+  
     <h2>{{ book_id }}</h2>
     <div class="container">
       <div class="row g-3">
@@ -27,14 +51,19 @@
             <div class="card-body">
               <h5 class="card-title">{{ book.title }}</h5>
               <p class="card-text">{{ book.price }}</p>
-
-
+              {% if book|is_in_cart:request.session %}
               <form action='{% url "home" %}' method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="book" value="{{ book.id }}" />
-                <input type="submit" class="btn btn-primary" value="Add to cart">
+                <input type="submit" class="btn btn-secondary " value="Remove" name="remove">
               </form>
-            
+             {% else %}
+                <form action='{% url "home" %}' method="POST">
+                  {% csrf_token %}
+                  <input type="hidden" name="book" value="{{ book.id }}" />
+                  <input type="submit" class="btn btn-primary" value="Add to cart" name="add">
+                </form>
+            {% endif %}
             
             </div>
           </div>
