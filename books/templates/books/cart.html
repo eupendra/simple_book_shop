@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load cart_helper %}
+{%block content%}
+<div class="container">
+<div class="container-fluid">
+    <h1>Your Shopping Cart</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Book Title</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for book in books %}
+        <tr>
+            <td>{{ book.title }}</td>
+            <td>{{ book.price }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr class="table-dark">
+            <td>Total</td>
+            <td>{{books|sum_of_cart|floatformat:2}}</td>
+        </tr>
+    </tfoot>
+    </table>
+</div>
+</div>
+{%endblock%}
