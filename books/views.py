@@ -18,7 +18,12 @@ def home(request):
     return render(request, 'books/home.html', context)
 
 def cart(request):
-    pass
+    local_cart = request.session.get('cart',dict())
+    book_list = list(local_cart.keys())
+
+    books_in_cart = Book.objects.filter(pk__in=book_list) #two _
+
+    return render(request,'books/cart.html',{'books':books_in_cart})
 
 def checkout(request):
     pass
