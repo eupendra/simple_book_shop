@@ -20,10 +20,24 @@ def home(request):
 def cart(request):
     local_cart = request.session.get('cart',dict())
     book_list = list(local_cart.keys())
-
-    books_in_cart = Book.objects.filter(pk__in=book_list) #two _
-
-    return render(request,'books/cart.html',{'books':books_in_cart})
+    print(book_list)
+    if len(book_list)>0:
+        books_in_cart = Book.objects.filter(pk__in=book_list) #two _
+        return render(request,'books/cart.html',{'books':books_in_cart})
+    else:
+         return render(request,'books/cart.html',{'message':"Cart is empty"})
 
 def checkout(request):
-    pass
+    if request.method == "GET":
+        local_cart = request.session.get('cart',dict())
+        book_list = list(local_cart.keys())
+        if len(book_list)==0:
+            message = "Add some books to cart first."
+            return render(request,'books/checkout.html',{'message':message})
+        else:
+            books_in_cart = Book.objects.filter(pk__in=book_list) #two _
+            return render(request,'books/checkout.html',{'books':books_in_cart})
+    else:
+        message = "Thank you for your order!"
+        request.session['cart'] = dict()
+        return render(request,'books/checkout.html',{'message':message})
