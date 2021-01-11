@@ -21,11 +21,11 @@ def cart(request):
     local_cart = request.session.get('cart',dict())
     book_list = list(local_cart.keys())
     print(book_list)
-    if len(book_list)>0:
+    if len(book_list)==0:
+        return render(request,'books/cart.html',{'message':"Cart is empty"})
+    else:
         books_in_cart = Book.objects.filter(pk__in=book_list) #two _
         return render(request,'books/cart.html',{'books':books_in_cart})
-    else:
-         return render(request,'books/cart.html',{'message':"Cart is empty"})
 
 def checkout(request):
     if request.method == "GET":
